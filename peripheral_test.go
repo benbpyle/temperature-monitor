@@ -22,6 +22,22 @@ func TestPeripheral_ParseTemperature_Test1(t *testing.T) {
 	}
 }
 
+func TestPeripheral_ParseHumidity_Test1(t *testing.T) {
+	// arrange
+	var s = "33011b480e10177000d4020427016500"
+	b, _ := hex.DecodeString(s)
+	p := new(Peripheral)
+	x := fmt.Sprintf("%02X%02X", b[10], b[11])
+
+	// act
+	parseTemperature(p, &x)
+
+	// assert
+	if p.Temperature != 51.6 {
+		t.Fail()
+	}
+}
+
 func TestPeripheral_ParseTemperature_Test2(t *testing.T) {
 	// arrange
 	var s = "33011b480e1017700154020427016500"
