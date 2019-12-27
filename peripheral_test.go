@@ -1,30 +1,39 @@
 package main
 
-import "testing"
+import (
+	"encoding/hex"
+	"fmt"
+	"testing"
+)
 
-func TestPeripheral_ParseData(t *testing.T) {
-	type fields struct {
-		Temperature  float32
-		Humidity     float32
-		BatteryLevel int
+func TestPeripheral_ParseData_Test1(t *testing.T) {
+	// arrange
+	var s = "33011b480e10177000d4020427016500"
+	b, _ := hex.DecodeString(s)
+	p := new(Peripheral)
+	x := fmt.Sprintf("%02X%02X", b[8], b[9])
+
+	// act
+	parseTemperature(p, &x)
+
+	// assert
+	if p.Temperature != 21.2 {
+		t.Fail()
 	}
-	type args struct {
-		b []byte
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			p := &Peripheral{
-				Temperature:  tt.fields.Temperature,
-				Humidity:     tt.fields.Humidity,
-				BatteryLevel: tt.fields.BatteryLevel,
-			}
-		})
+}
+
+func TestPeripheral_ParseData_Test2(t *testing.T) {
+	// arrange
+	var s = "33011b480e1017700154020427016500"
+	b, _ := hex.DecodeString(s)
+	p := new(Peripheral)
+	x := fmt.Sprintf("%02X%02X", b[8], b[9])
+
+	// act
+	parseTemperature(p, &x)
+
+	// assert
+	if p.Temperature != 34 {
+		t.Fail()
 	}
 }
