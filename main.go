@@ -8,12 +8,14 @@ import (
 	"github.com/raff/goble"
 )
 
+var redisService *RedisService
+
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	verbose := flag.Bool("verbose", false, "dump all events")
 	dups := flag.Bool("allow-duplicates", true, "allow duplicates when scanning")
 	flag.Parse()
-
+	_ = New("127.0.0.1:6379")
 	var quit chan bool
 
 	ble := goble.New()
@@ -46,13 +48,8 @@ func main() {
 			return
 		}
 
-		//s := fmt.Sprintf("Local Name: %s\n", ev.Peripheral.Advertisement.LocalName)
-
 		p := Peripheral{}
 		p.ParseData(ev.Peripheral.Advertisement.ManufacturerData)
-		s := fmt.Sprintf("Raw: %x", ev.Peripheral.Advertisement)
-		log.Println(s)
-		log.Println("Sensor: ", p)
 		return
 	})
 
