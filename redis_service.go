@@ -1,6 +1,8 @@
 package main
 
 import (
+	json2 "encoding/json"
+	"fmt"
 	"github.com/garyburd/redigo/redis"
 	"log"
 )
@@ -38,4 +40,18 @@ func New(url string) *RedisService {
 		pool: redispool,
 		conn: conn,
 	}
+}
+
+// Publish publish key value
+func (s *RedisService) Publish(p *Peripheral) error {
+	json, err := json2.Marshal(p)
+	fmt.Println("Publishing: ", p)
+	conn := s.pool.Get()
+	_, _ = conn.Do("PUBLISH", "c1", json)
+
+	if err != nil {
+		return fmt.Errorf("error publishing: %s", err)
+	}
+
+	return nil
 }

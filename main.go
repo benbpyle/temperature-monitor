@@ -15,7 +15,7 @@ func main() {
 	verbose := flag.Bool("verbose", false, "dump all events")
 	dups := flag.Bool("allow-duplicates", true, "allow duplicates when scanning")
 	flag.Parse()
-	_ = New("127.0.0.1:6379")
+	redisService = New("127.0.0.1:6379")
 	var quit chan bool
 
 	ble := goble.New()
@@ -50,6 +50,12 @@ func main() {
 
 		p := Peripheral{}
 		p.ParseData(ev.Peripheral.Advertisement.ManufacturerData)
+		err := redisService.Publish(&p)
+
+		if err != nil {
+			fmt.Println("Error happened: ", err)
+		}
+
 		return
 	})
 

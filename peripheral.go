@@ -7,14 +7,14 @@ import (
 )
 
 type Peripheral struct {
-	Temperature float64
-	Humidity float64
-	BatteryLevel int64
+	Temperature  float64 `json:"temperature"`
+	Humidity     float64 `json:"humidity"`
+	BatteryLevel int64   `json:"batteryLevel"`
 }
 
 // ParseData takes a byte [] and separates out the pieces from the bluetooth
 // temperature sensor readings
-func (p *Peripheral) ParseData(b []byte)  {
+func (p *Peripheral) ParseData(b []byte) {
 	if len(b) < 13 {
 		return
 	}
